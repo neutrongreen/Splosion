@@ -1,0 +1,25 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://entitys/voxels/VoxelMap.gd" type="Script" id=1]
+[ext_resource path="res://entitys/voxels/DataTypes/ShapeList.tres" type="Resource" id=2]
+[ext_resource path="res://entitys/voxels/Shapes/13.tres" type="Resource" id=3]
+[ext_resource path="res://entitys/voxels/Shapes/03.tres" type="Resource" id=4]
+[ext_resource path="res://entitys/voxels/Shapes/01.tres" type="Resource" id=5]
+[ext_resource path="res://entitys/voxels/Shapes/09.tres" type="Resource" id=6]
+[ext_resource path="res://entitys/voxels/Shapes/10.tres" type="Resource" id=7]
+[ext_resource path="res://entitys/voxels/Shapes/02.tres" type="Resource" id=8]
+[ext_resource path="res://entitys/voxels/Shapes/04.tres" type="Resource" id=9]
+[ext_resource path="res://entitys/voxels/Shapes/06.tres" type="Resource" id=10]
+[ext_resource path="res://entitys/voxels/Shapes/08.tres" type="Resource" id=11]
+[ext_resource path="res://entitys/voxels/Shapes/11.tres" type="Resource" id=12]
+[ext_resource path="res://entitys/voxels/Shapes/07.tres" type="Resource" id=13]
+[ext_resource path="res://entitys/voxels/Shapes/00.tres" type="Resource" id=14]
+[ext_resource path="res://entitys/voxels/Shapes/12.tres" type="Resource" id=15]
+[ext_resource path="res://entitys/voxels/Shapes/14.tres" type="Resource" id=16]
+[ext_resource path="res://entitys/voxels/Shapes/05.tres" type="Resource" id=17]
+
+[node name="VoxelMap" type="Node2D"]
+script = ExtResource( 1 )
+SHAPE_LIST = ExtResource( 2 )
+VOXEL_TABLE = [ ExtResource( 14 ), ExtResource( 5 ), ExtResource( 8 ), ExtResource( 4 ), ExtResource( 9 ), ExtResource( 17 ), ExtResource( 10 ), ExtResource( 13 ), ExtResource( 11 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 12 ), ExtResource( 15 ), ExtResource( 3 ), ExtResource( 16 ) ]
+MAP_SIZE = Vector2( 20, 20 )

@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://entitys/voxels/DataTypes/ShapeList.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+SHAPES = [ PoolVector2Array( 0, 0, 0.5, 0, 0, 0.5 ), PoolVector2Array( 0, 0, 1, 0, 1, 0.5, 0, 0.5 ), PoolVector2Array( 0, 0, 0.5, 0, 1, 0.5, 1, 1, 0, 1 ), PoolVector2Array( 0, 0, 0.5, 0, 1, 0.5, 1, 1, 0.5, 1, 0, 0.5 ), PoolVector2Array( 0, 0, 1, 0, 1, 1, 0, 1 ), PoolVector2Array( 0, 0, 0.5, 0, 0.5, 1, 0, 1 ) ]
