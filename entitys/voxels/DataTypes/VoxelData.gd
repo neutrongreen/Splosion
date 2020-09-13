@@ -8,7 +8,7 @@ class_name VoxelData
 
 export (int) var SHAPE_ID
 export (int, FLAGS, "TL", "TR", "BL", "BR") var points
-export (Array, Vector3) var INTERPOLATED_EDGES
+export (Array, Vector2) var INTERPOLATED_EDGES
 export (bool) var FLIP_X
 export (bool) var FLIP_Y
 # Called when the node enters the scene tree for the first time.

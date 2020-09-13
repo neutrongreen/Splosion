@@ -1,5 +1,9 @@
 extends StaticBody2D
 
+var edges = [[Vector2(0, 0), Vector2(1, 0)], 
+				[Vector2(1, 0), Vector2(1, 1)], 
+				[Vector2(0, 1), Vector2(1, 1)], 
+				[Vector2(0, 0), Vector2(0, 1)]]
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -38,7 +42,11 @@ func _ready():
 		if VOXEL_DATA.FLIP_Y:
 			tempvector = flip_y_axis(tempvector)
 		
-		#apply interpolation
+		#apply interpolation if vertex is = edge
+		for d in VOXEL_DATA.INTERPOLATED_EDGES:
+			if d.x == i:
+				var value = lerp(map.map[edges[d.y][0].x], map.map[edges[d.y][0].y], 0.5)
+				break
 		
 		tempvector *= map.TILE_SIZE
 		#scale shape to needed size
