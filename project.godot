@@ -29,6 +29,10 @@ _global_script_class_icons={
 config/name="Splosion"
 config/icon="res://assests/icon.png"
 
+[memory]
+
+limits/message_queue/max_size_kb=2048
+
 [rendering]
 
 environment/default_environment="res://scenes/default_env.tres"

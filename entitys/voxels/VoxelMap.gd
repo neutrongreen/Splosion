@@ -13,7 +13,7 @@ export (Resource) var SHAPE_LIST
 export (Array, Resource) var VOXEL_TABLE
 export (int) var TILE_SIZE = 32
 export (Vector2) var MAP_SIZE
-export (int) var SURFACE_LEVEL = -0.05
+export (float) var SURFACE_LEVEL = 0.4
 # Called when the node enters the scene tree for the first time.
 var map = []
 func _ready():
@@ -26,7 +26,7 @@ func _ready():
 	for x in range(MAP_SIZE.x):
 		map.append([])
 		for y in range(MAP_SIZE.y):
-			map[x].append(noise.get_noise_2d(x, y))
+			map[x].append(noise.get_noise_2d(x, y) + 1)
 	for x in range(MAP_SIZE.x - 1):
 		for y in range(MAP_SIZE.y - 1):
 			var shape = 0

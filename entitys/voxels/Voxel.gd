@@ -4,7 +4,21 @@ var edges = [[Vector2(0, 0), Vector2(1, 0)],
 				[Vector2(1, 0), Vector2(1, 1)], 
 				[Vector2(0, 1), Vector2(1, 1)], 
 				[Vector2(0, 0), Vector2(0, 1)]]
-
+var edgesaxis = [
+	0,
+	1,
+	0,
+	1
+]
+#http://jamie-wong.com/2014/08/19/metaballs-and-marching-squares/
+func interpolateVertsY(var v1, var v2, var vect1, var vect2):
+	vect1.y = vect1.y + ((map.SURFACE_LEVEL-v1)/(v2-v1))*(vect2.y - vect1.y)
+	vect1.y = clamp(vect1.y, 0, 1)
+	return vect1.y
+func interpolateVertsX(var v1, var v2, var vect1, var vect2):
+	vect1.x = vect1.x + ((map.SURFACE_LEVEL-v1)/(v2-v1))*(vect2.x - vect1.x)
+	vect1.x = clamp(vect1.x, 0, 1)
+	return vect1.x
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -43,11 +57,17 @@ func _ready():
 			tempvector = flip_y_axis(tempvector)
 		
 		#apply interpolation if vertex is = edge
-		for d in VOXEL_DATA.INTERPOLATED_EDGES:
-			if d.x == i:
-				var value = lerp(map.map[edges[d.y][0].x], map.map[edges[d.y][0].y], 0.5)
+		for edge in VOXEL_DATA.INTERPOLATED_EDGES:
+			if edge.x == i:
+				var b = edges[edge.y][1]
+				var d = edges[edge.y][0]
+				if edgesaxis[edge.y] == 0:
+					tempvector.x = interpolateVertsX(map.map[d.x + mappos.x][d.y + mappos.y], 
+					map.map[b.x + mappos.x][b.y + mappos.y], d, b)
+				else:
+					tempvector.y = interpolateVertsY(map.map[d.x + mappos.x][d.y + mappos.y], 
+					map.map[b.x + mappos.x][b.y + mappos.y], d, b)
 				break
-		
 		tempvector *= map.TILE_SIZE
 		#scale shape to needed size
 		#if it is get scalar and mutiplay 

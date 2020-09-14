@@ -6,6 +6,6 @@
 script = ExtResource( 1 )
 SHAPE_ID = 2
 points = 11
-INTERPOLATED_EDGES = [  ]
+INTERPOLATED_EDGES = [ Vector2( 1, 2 ), Vector2( 2, 3 ) ]
 FLIP_X = true
 FLIP_Y = true
