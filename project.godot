@@ -31,7 +31,7 @@ config/icon="res://assests/icon.png"
 
 [memory]
 
-limits/message_queue/max_size_kb=2048
+limits/message_queue/max_size_kb=10240
 
 [rendering]
 
