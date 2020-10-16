@@ -8,7 +8,7 @@ var bitwise = [1, 2, 4, 8]
 var noise = OpenSimplexNoise.new()
 
 onready var VoxelNode = load("res://entitys/voxels/Voxel.tscn")
-
+export (int) var CHUNK_SIZE = 32
 export (Resource) var SHAPE_LIST
 export (Array, Resource) var VOXEL_TABLE
 export (int) var TILE_SIZE = 32
@@ -128,14 +128,14 @@ func _ready():
 	noise.persistence = 0.8
 	generate_map()
 
-func _draw():
-	for x in range(MAP_SIZE.x - 1):
-		for y in range(MAP_SIZE.y - 1):
-			
-			if(polygons[x][y]):
-				var geo_invalid = Geometry.triangulate_polygon(polygons[x][y]).empty()
-				if(!geo_invalid):
-					draw_polygon(polygons[x][y], colours)
+#func _draw():
+#	for x in range(MAP_SIZE.x - 1):
+#		for y in range(MAP_SIZE.y - 1):
+#
+#			if(polygons[x][y]):
+#				var geo_invalid = Geometry.triangulate_polygon(polygons[x][y]).empty()
+#				if(!geo_invalid):
+#					draw_polygon(polygons[x][y], colours)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
