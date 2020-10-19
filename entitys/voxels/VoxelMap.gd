@@ -8,6 +8,7 @@ var bitwise = [1, 2, 4, 8]
 var noise = OpenSimplexNoise.new()
 
 onready var VoxelChunk = load("res://entitys/voxels/VoxelChunk.tscn")
+onready var Ball = load("res://entitys/physics/ball.tscn")
 export (int) var CHUNK_SIZE = 32
 export (Resource) var SHAPE_LIST
 export (Array, Resource) var VOXEL_TABLE
@@ -15,6 +16,7 @@ export (int) var TILE_SIZE = 32
 export (Vector2) var MAP_SIZE = Vector2(4, 4)
 export (float) var MAP_SCALE = 1
 export (float) var SURFACE_LEVEL = 0.4
+export (bool) var testing = false;
 # Called when the node enters the scene tree for the first time.
 var map = []
 onready var chunks = []
@@ -29,6 +31,8 @@ var edgesaxis = [
 	1
 ]
 
+
+
 var colours = PoolColorArray([Color(255,255,255)])
 #http://jamie-wong.com/2014/08/19/metaballs-and-marching-squares/
 func interpolateVertsY(var v1, var v2, var vect1, var vect2):
@@ -39,6 +43,9 @@ func interpolateVertsX(var v1, var v2, var vect1, var vect2):
 	vect1.x = vect1.x + ((SURFACE_LEVEL-v1)/(v2-v1))*(vect2.x - vect1.x)
 	vect1.x = clamp(vect1.x, 0, 1)
 	return vect1.x
+	
+	
+	
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -189,9 +196,14 @@ func _ready():
 #func _process(delta):
 #	pass
 func _process(delta):
-	if Input.is_action_just_pressed("ui_up"):
-		SURFACE_LEVEL += 0.05
+	if Input.is_action_pressed("ui_up"):
+		SURFACE_LEVEL += 0.1*delta
 		generate_map()
-	elif Input.is_action_just_pressed("ui_down"):
-		SURFACE_LEVEL -= 0.05
+	elif Input.is_action_pressed("ui_down"):
+		SURFACE_LEVEL -= 0.1*delta
 		generate_map()
+	
+	if Input.is_action_just_pressed("ui_select"):
+		var tempball = Ball.instance()
+		tempball.position = get_global_mouse_position()
+		add_child(tempball)

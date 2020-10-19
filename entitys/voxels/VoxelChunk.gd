@@ -6,7 +6,7 @@ var polygons = []
 var bitwise = [1, 2, 4, 8]
 var colours = PoolColorArray([Color(255,255,255)])
 var test_colours = NAN
-export (bool) var testing = false;
+
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -127,14 +127,13 @@ func _ready():
 #and redraws the collsion meshes 
 
 func _draw():
-
 	shape_owner_clear_shapes(0)
 	for x in range(map.CHUNK_SIZE):
 		for y in range(map.CHUNK_SIZE):
 			if(polygons[x][y]):
 				var geo_invalid = Geometry.triangulate_polygon(polygons[x][y]).empty()
 				if(!geo_invalid):
-					if testing:
+					if map.testing:
 						draw_polygon(polygons[x][y], test_colours)
 					else:
 						draw_polygon(polygons[x][y], colours)

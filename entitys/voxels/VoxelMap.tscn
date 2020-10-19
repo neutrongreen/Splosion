@@ -20,9 +20,10 @@
 
 [node name="VoxelMap" type="Node2D"]
 script = ExtResource( 1 )
-CHUNK_SIZE = 16
+CHUNK_SIZE = 4
 SHAPE_LIST = ExtResource( 2 )
 VOXEL_TABLE = [ ExtResource( 14 ), ExtResource( 5 ), ExtResource( 8 ), ExtResource( 4 ), ExtResource( 9 ), ExtResource( 17 ), ExtResource( 10 ), ExtResource( 13 ), ExtResource( 11 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 12 ), ExtResource( 15 ), ExtResource( 3 ), ExtResource( 16 ) ]
-MAP_SIZE = Vector2( 2, 2 )
-MAP_SCALE = 0.75
+MAP_SIZE = Vector2( 8, 8 )
+MAP_SCALE = 0.5
 SURFACE_LEVEL = 0.9
+testing = true
