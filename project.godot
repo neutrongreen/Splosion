@@ -27,6 +27,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Splosion"
+run/main_scene="res://entitys/voxels/VoxelMap.tscn"
 config/icon="res://assests/icon.png"
 
 [memory]

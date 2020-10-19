@@ -7,16 +7,17 @@ var bitwise = [1, 2, 4, 8]
 
 var noise = OpenSimplexNoise.new()
 
-onready var VoxelNode = load("res://entitys/voxels/Voxel.tscn")
+onready var VoxelChunk = load("res://entitys/voxels/VoxelChunk.tscn")
 export (int) var CHUNK_SIZE = 32
 export (Resource) var SHAPE_LIST
 export (Array, Resource) var VOXEL_TABLE
 export (int) var TILE_SIZE = 32
-export (Vector2) var MAP_SIZE
+export (Vector2) var MAP_SIZE = Vector2(4, 4)
+export (float) var MAP_SCALE = 1
 export (float) var SURFACE_LEVEL = 0.4
 # Called when the node enters the scene tree for the first time.
 var map = []
-var polygons = []
+onready var chunks = []
 var edges = [[Vector2(0, 0), Vector2(1, 0)], 
 				[Vector2(1, 0), Vector2(1, 1)], 
 				[Vector2(0, 1), Vector2(1, 1)], 
@@ -57,69 +58,113 @@ func flip_y_axis(var vector):
 		vector.y = 1
 	return vector
 
-func get_shape(var VOXEL_DATA, var mappos):
-	#set shape to voxel data shape
-	var shape = SHAPE_LIST.SHAPES[VOXEL_DATA.SHAPE_ID]
-	#for i in range of shape size
-	for i in range(shape.size()):
-		var tempvector = shape[i]
-		#flip x axis
-		if VOXEL_DATA.FLIP_X:
-			tempvector = flip_x_axis(tempvector)
-		
-		#flip y axis
-		if VOXEL_DATA.FLIP_Y:
-			tempvector = flip_y_axis(tempvector)
-		
-		#apply interpolation if vertex is = edge
-		for edge in VOXEL_DATA.INTERPOLATED_EDGES:
-			if edge.x == i:
-				var b = edges[edge.y][1]
-				var d = edges[edge.y][0]
-				if edgesaxis[edge.y] == 0:
-					tempvector.x = interpolateVertsX(map[d.x + mappos.x][d.y + mappos.y], 
-					map[b.x + mappos.x][b.y + mappos.y], d, b)
-				else:
-					tempvector.y = interpolateVertsY(map[d.x + mappos.x][d.y + mappos.y], 
-					map[b.x + mappos.x][b.y + mappos.y], d, b)
-				break
-		tempvector += mappos
-		tempvector *= TILE_SIZE
-		#scale shape to needed size
-		#if it is get scalar and mutiplay 
-		#set point to shape
-		shape.set(i, tempvector)
-	return shape
+#https://www.reddit.com/r/godot/comments/9qmjfj/remove_all_children/
+static func delete_children(node):
+	for n in node.get_children():
+		node.remove_child(n)
+		n.queue_free()
 
+#func get_shape(var VOXEL_DATA, var mappos):
+#	#set shape to voxel data shape
+#	var shape = SHAPE_LIST.SHAPES[VOXEL_DATA.SHAPE_ID]
+#	#for i in range of shape size
+#	for i in range(shape.size()):
+#		var tempvector = shape[i]
+#		#flip x axis
+#		if VOXEL_DATA.FLIP_X:
+#			tempvector = flip_x_axis(tempvector)
+#
+#		#flip y axis
+#		if VOXEL_DATA.FLIP_Y:
+#			tempvector = flip_y_axis(tempvector)
+#
+#		#apply interpolation if vertex is = edge
+#		for edge in VOXEL_DATA.INTERPOLATED_EDGES:
+#			if edge.x == i:
+#				var b = edges[edge.y][1]
+#				var d = edges[edge.y][0]
+#				if edgesaxis[edge.y] == 0:
+#					tempvector.x = interpolateVertsX(map[d.x + mappos.x][d.y + mappos.y], 
+#					map[b.x + mappos.x][b.y + mappos.y], d, b)
+#				else:
+#					tempvector.y = interpolateVertsY(map[d.x + mappos.x][d.y + mappos.y], 
+#					map[b.x + mappos.x][b.y + mappos.y], d, b)
+#				break
+#		tempvector += mappos
+#		tempvector *= TILE_SIZE
+#		#scale shape to needed size
+#		#if it is get scalar and mutiplay 
+#		#set point to shape
+#		shape.set(i, tempvector)
+#	return shape
+
+#func generate_map():
+#	map = []
+#	polygons = []
+#	for x in range(MAP_SIZE.x):
+#		map.append([])
+#		for y in range(MAP_SIZE.y):
+#			map[x].append(noise.get_noise_2d(x, y) + 1)
+#	#polyonise
+#	for x in range(MAP_SIZE.x - 1):
+#		polygons.append([])
+#		for y in range(MAP_SIZE.y - 1):
+#			var polygon = null
+#			var voxid = 0
+#			#get location value
+#			if map[x][y] > SURFACE_LEVEL:
+#				voxid |= bitwise[0]
+#			if map[x+1][y] > SURFACE_LEVEL:
+#				voxid |= bitwise[1]
+#			if map[x][y+1] > SURFACE_LEVEL:
+#				voxid |= bitwise[2]
+#			if map[x+1][y+1] > SURFACE_LEVEL:
+#				voxid |= bitwise[3]
+#
+#			for i in VOXEL_TABLE:
+#				if i.points == voxid:
+#					polygon = get_shape(i, Vector2(x,y))
+#
+#			polygons[x].append(polygon)
+			
+#	pass # Replace with function body.
+#
+#func generate_voxel(mappos):
+#	var polygon = null
+#	var voxid = 0
+#	#get location value
+#	if map[mappos.x][mappos.y] > SURFACE_LEVEL:
+#		voxid |= bitwise[0]
+#	if map[mappos.x+1][mappos.y] > SURFACE_LEVEL:
+#		voxid |= bitwise[1]
+#	if map[mappos.x][mappos.y+1] > SURFACE_LEVEL:
+#		voxid |= bitwise[2]
+#	if map[mappos.x+1][mappos.y+1] > SURFACE_LEVEL:
+#		voxid |= bitwise[3]
+#	for i in VOXEL_TABLE:
+#		if i.points == voxid:
+#			return get_shape(i, Vector2(mappos.x,mappos.y))
 func generate_map():
 	map = []
-	polygons = []
-	for x in range(MAP_SIZE.x):
+	for x in range((MAP_SIZE.x*CHUNK_SIZE) + 1):
 		map.append([])
-		for y in range(MAP_SIZE.y):
-			map[x].append(noise.get_noise_2d(x, y) + 1)
-	for x in range(MAP_SIZE.x - 1):
-		polygons.append([])
-		for y in range(MAP_SIZE.y - 1):
-			var polygon = null
-			var voxid = 0
-			#get location value
-			if map[x][y] > SURFACE_LEVEL:
-				voxid |= bitwise[0]
-			if map[x+1][y] > SURFACE_LEVEL:
-				voxid |= bitwise[1]
-			if map[x][y+1] > SURFACE_LEVEL:
-				voxid |= bitwise[2]
-			if map[x+1][y+1] > SURFACE_LEVEL:
-				voxid |= bitwise[3]
+		for y in range((MAP_SIZE.y*CHUNK_SIZE) + 1):
+			map[x].append(noise.get_noise_2d(x*MAP_SCALE, y*MAP_SCALE) + 1)
+	if(!chunks):
+		for x in range(MAP_SIZE.x):
+			chunks.append([])
+			for y in range(MAP_SIZE.y):
+				chunks[x].append(VoxelChunk.instance())
+				chunks[x][y].chunk_pos = Vector2(x, y)
+				add_child(chunks[x][y])
+	else:
+		for x in range(MAP_SIZE.x):
+			chunks.append([])
+			for y in range(MAP_SIZE.y):
+				chunks[x][y].update_voxels()
 			
-			for i in VOXEL_TABLE:
-				if i.points == voxid:
-					polygon = get_shape(i, Vector2(x,y))
 			
-			polygons[x].append(polygon)
-			
-	pass # Replace with function body.
+
 
 func _ready():
 	noise.seed = randi()
@@ -127,6 +172,8 @@ func _ready():
 	noise.period = 20.0
 	noise.persistence = 0.8
 	generate_map()
+	
+	
 
 #func _draw():
 #	for x in range(MAP_SIZE.x - 1):
@@ -141,12 +188,10 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
-func _physics_process(delta):
-	if Input.is_action_pressed("ui_up"):
-		SURFACE_LEVEL += 0.1*delta
+func _process(delta):
+	if Input.is_action_just_pressed("ui_up"):
+		SURFACE_LEVEL += 0.05
 		generate_map()
-		update()
-	elif Input.is_action_pressed("ui_down"):
-		SURFACE_LEVEL -= 0.1*delta
+	elif Input.is_action_just_pressed("ui_down"):
+		SURFACE_LEVEL -= 0.05
 		generate_map()
-		update()
