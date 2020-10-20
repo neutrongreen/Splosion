@@ -4,6 +4,7 @@ var bitwise = [1, 2, 4, 8]
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
+#http://jamie-wong.com/2014/08/19/metaballs-and-marching-squares/
 
 var noise = OpenSimplexNoise.new()
 
@@ -30,133 +31,24 @@ var edgesaxis = [
 	0,
 	1
 ]
-
-
-
-var colours = PoolColorArray([Color(255,255,255)])
-#http://jamie-wong.com/2014/08/19/metaballs-and-marching-squares/
-func interpolateVertsY(var v1, var v2, var vect1, var vect2):
-	vect1.y = vect1.y + ((SURFACE_LEVEL-v1)/(v2-v1))*(vect2.y - vect1.y)
-	vect1.y = clamp(vect1.y, 0, 1)
-	return vect1.y
-func interpolateVertsX(var v1, var v2, var vect1, var vect2):
-	vect1.x = vect1.x + ((SURFACE_LEVEL-v1)/(v2-v1))*(vect2.x - vect1.x)
-	vect1.x = clamp(vect1.x, 0, 1)
-	return vect1.x
-	
-	
-	
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
 # Called when the node enters the scene tree for the first time.
 #flip axis commands
-func flip_x_axis(var vector):
-	if vector.x == 1:
-		vector.x = 0 
-	elif vector.x == 0:
-		vector.x = 1
-	return vector
-
-func flip_y_axis(var vector):
-	if vector.y == 1:
-		vector.y = 0 
-	elif vector.y == 0:
-		vector.y = 1
-	return vector
-
 #https://www.reddit.com/r/godot/comments/9qmjfj/remove_all_children/
 static func delete_children(node):
 	for n in node.get_children():
 		node.remove_child(n)
 		n.queue_free()
 
-#func get_shape(var VOXEL_DATA, var mappos):
-#	#set shape to voxel data shape
-#	var shape = SHAPE_LIST.SHAPES[VOXEL_DATA.SHAPE_ID]
-#	#for i in range of shape size
-#	for i in range(shape.size()):
-#		var tempvector = shape[i]
-#		#flip x axis
-#		if VOXEL_DATA.FLIP_X:
-#			tempvector = flip_x_axis(tempvector)
-#
-#		#flip y axis
-#		if VOXEL_DATA.FLIP_Y:
-#			tempvector = flip_y_axis(tempvector)
-#
-#		#apply interpolation if vertex is = edge
-#		for edge in VOXEL_DATA.INTERPOLATED_EDGES:
-#			if edge.x == i:
-#				var b = edges[edge.y][1]
-#				var d = edges[edge.y][0]
-#				if edgesaxis[edge.y] == 0:
-#					tempvector.x = interpolateVertsX(map[d.x + mappos.x][d.y + mappos.y], 
-#					map[b.x + mappos.x][b.y + mappos.y], d, b)
-#				else:
-#					tempvector.y = interpolateVertsY(map[d.x + mappos.x][d.y + mappos.y], 
-#					map[b.x + mappos.x][b.y + mappos.y], d, b)
-#				break
-#		tempvector += mappos
-#		tempvector *= TILE_SIZE
-#		#scale shape to needed size
-#		#if it is get scalar and mutiplay 
-#		#set point to shape
-#		shape.set(i, tempvector)
-#	return shape
-
-#func generate_map():
-#	map = []
-#	polygons = []
-#	for x in range(MAP_SIZE.x):
-#		map.append([])
-#		for y in range(MAP_SIZE.y):
-#			map[x].append(noise.get_noise_2d(x, y) + 1)
-#	#polyonise
-#	for x in range(MAP_SIZE.x - 1):
-#		polygons.append([])
-#		for y in range(MAP_SIZE.y - 1):
-#			var polygon = null
-#			var voxid = 0
-#			#get location value
-#			if map[x][y] > SURFACE_LEVEL:
-#				voxid |= bitwise[0]
-#			if map[x+1][y] > SURFACE_LEVEL:
-#				voxid |= bitwise[1]
-#			if map[x][y+1] > SURFACE_LEVEL:
-#				voxid |= bitwise[2]
-#			if map[x+1][y+1] > SURFACE_LEVEL:
-#				voxid |= bitwise[3]
-#
-#			for i in VOXEL_TABLE:
-#				if i.points == voxid:
-#					polygon = get_shape(i, Vector2(x,y))
-#
-#			polygons[x].append(polygon)
-			
-#	pass # Replace with function body.
-#
-#func generate_voxel(mappos):
-#	var polygon = null
-#	var voxid = 0
-#	#get location value
-#	if map[mappos.x][mappos.y] > SURFACE_LEVEL:
-#		voxid |= bitwise[0]
-#	if map[mappos.x+1][mappos.y] > SURFACE_LEVEL:
-#		voxid |= bitwise[1]
-#	if map[mappos.x][mappos.y+1] > SURFACE_LEVEL:
-#		voxid |= bitwise[2]
-#	if map[mappos.x+1][mappos.y+1] > SURFACE_LEVEL:
-#		voxid |= bitwise[3]
-#	for i in VOXEL_TABLE:
-#		if i.points == voxid:
-#			return get_shape(i, Vector2(mappos.x,mappos.y))
-func generate_map():
-	map = []
-	for x in range((MAP_SIZE.x*CHUNK_SIZE) + 1):
-		map.append([])
-		for y in range((MAP_SIZE.y*CHUNK_SIZE) + 1):
-			map[x].append(noise.get_noise_2d(x*MAP_SCALE, y*MAP_SCALE) + 1)
+func generate_map(persist):
+	if !persist:
+		map = []
+		for x in range((MAP_SIZE.x*CHUNK_SIZE) + 1):
+			map.append([])
+			for y in range((MAP_SIZE.y*CHUNK_SIZE) + 1):
+				map[x].append(noise.get_noise_2d(x*MAP_SCALE, y*MAP_SCALE) + 1)
 	if(!chunks):
 		for x in range(MAP_SIZE.x):
 			chunks.append([])
@@ -170,26 +62,27 @@ func generate_map():
 			for y in range(MAP_SIZE.y):
 				chunks[x][y].update_voxels()
 			
-			
 
+		
+#https://stackoverflow.com/questions/15856411/finding-all-the-points-within-a-circle-in-2d-space
+func circle_brush(mappos, r, strength):
+	for x in range(mappos.x - r, mappos.x + r):
+		var yspan = round(r*sin(acos((mappos.x-x)/r)));
+		print(yspan)
+		for y in range(mappos.y - yspan, mappos.y + yspan):
+			var i = Vector2(x, y)
+			if !((i.y > CHUNK_SIZE*MAP_SIZE.y) or i.y < 0) and !((i.x > CHUNK_SIZE*MAP_SIZE.x) or i.x < 0):
+				#update map location
+				map[i.x][i.y] -= strength
+				#(x, y), (x, ySym), (xSym , y), (xSym, ySym) are in the circle
+		
 
 func _ready():
 	noise.seed = randi()
 	noise.octaves = 4
 	noise.period = 20.0
 	noise.persistence = 0.8
-	generate_map()
-	
-	
-
-#func _draw():
-#	for x in range(MAP_SIZE.x - 1):
-#		for y in range(MAP_SIZE.y - 1):
-#
-#			if(polygons[x][y]):
-#				var geo_invalid = Geometry.triangulate_polygon(polygons[x][y]).empty()
-#				if(!geo_invalid):
-#					draw_polygon(polygons[x][y], colours)
+	generate_map(false)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -198,12 +91,21 @@ func _ready():
 func _process(delta):
 	if Input.is_action_pressed("ui_up"):
 		SURFACE_LEVEL += 0.1*delta
-		generate_map()
+		generate_map(true)
 	elif Input.is_action_pressed("ui_down"):
 		SURFACE_LEVEL -= 0.1*delta
-		generate_map()
+		generate_map(true)
 	
 	if Input.is_action_just_pressed("ui_select"):
 		var tempball = Ball.instance()
 		tempball.position = get_global_mouse_position()
 		add_child(tempball)
+	
+	if Input.is_action_pressed("ui_accept"):
+		var pos = get_global_mouse_position()
+		pos.x = round(pos.x/TILE_SIZE)
+		pos.y = round(pos.y/TILE_SIZE)
+		if pos.x < CHUNK_SIZE*MAP_SIZE.x and pos.x > 0:
+			if pos.y < CHUNK_SIZE*MAP_SIZE.y and pos.y > 0:
+				circle_brush(pos, 2, 0.8*delta)
+				generate_map(true)
