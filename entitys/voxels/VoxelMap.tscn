@@ -26,4 +26,3 @@ VOXEL_TABLE = [ ExtResource( 14 ), ExtResource( 5 ), ExtResource( 8 ), ExtResour
 MAP_SIZE = Vector2( 8, 8 )
 MAP_SCALE = 0.5
 SURFACE_LEVEL = 0.9
-testing = true
