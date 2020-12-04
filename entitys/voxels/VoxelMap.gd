@@ -70,9 +70,9 @@ func get_updated_chunks(coords):
 	coords.y /= CHUNK_SIZE
 	x_array.append(floor(coords.x))
 	y_array.append(floor(coords.y))
-	if fmod(coords.x, CHUNK_SIZE) == 0:
+	if fmod(coords.x, 1) == 0:
 		x_array.append(floor(coords.x) - 1)
-	if fmod(coords.y, CHUNK_SIZE) == 0:
+	if fmod(coords.y, 1) == 0:
 		y_array.append(floor(coords.y) - 1)
 	for x in x_array:
 		for y in y_array:
@@ -85,7 +85,7 @@ func get_updated_chunks(coords):
 func circle_brush(mappos, r, strength):
 	var updated_chunks = []
 	for x in range(mappos.x - r, mappos.x + r):
-		var yspan = round(r*sin(acos((mappos.x-x)/r)));
+		var yspan = floor(r*sin(acos((mappos.x-x)/r)));
 		for y in range(mappos.y - yspan, mappos.y + yspan):
 			var i = Vector2(x, y)
 			if !((i.y > CHUNK_SIZE*MAP_SIZE.y) or i.y < 0) and !((i.x > CHUNK_SIZE*MAP_SIZE.x) or i.x < 0):
@@ -93,7 +93,6 @@ func circle_brush(mappos, r, strength):
 				map[i.x][i.y] -= strength
 				#then get what chunks are updated and if not in the update list add them
 				var tempchunks = get_updated_chunks(i)
-				print(tempchunks)
 				for c in tempchunks:
 					var is_dup = false
 					for f in updated_chunks:
@@ -102,7 +101,6 @@ func circle_brush(mappos, r, strength):
 							break
 					if !is_dup:
 						updated_chunks.append(c)
-	print(updated_chunks)
 	for i in updated_chunks:
 		chunks[i.x][i.y].update_voxels()
 		chunks[i.x][i.y].colours = PoolColorArray([Color(255,255,0)])
