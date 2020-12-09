@@ -15,6 +15,7 @@ export (Resource) var SHAPE_LIST
 export (Array, Resource) var VOXEL_TABLE
 export (int) var TILE_SIZE = 32
 export (Vector2) var MAP_SIZE = Vector2(4, 4)
+export (Vector2) var SPAWN_OFFSET = Vector2(4, 4)
 export (float) var MAP_SCALE = 1
 export (float) var SURFACE_LEVEL = 0.4
 export (bool) var testing = false;
@@ -90,7 +91,7 @@ func circle_brush(mappos, r, strength):
 			var i = Vector2(x, y)
 			if !((i.y > CHUNK_SIZE*MAP_SIZE.y) or i.y < 0) and !((i.x > CHUNK_SIZE*MAP_SIZE.x) or i.x < 0):
 				#update map location
-				map[i.x][i.y] -= strength
+				map[i.x][i.y] = strength
 				#then get what chunks are updated and if not in the update list add them
 				var tempchunks = get_updated_chunks(i)
 				for c in tempchunks:
@@ -103,38 +104,41 @@ func circle_brush(mappos, r, strength):
 						updated_chunks.append(c)
 	for i in updated_chunks:
 		chunks[i.x][i.y].update_voxels()
-		chunks[i.x][i.y].colours = PoolColorArray([Color(255,255,0)])
+		#recoulor if updetated
+#		chunks[i.x][i.y].colours = PoolColorArray([Color(255,255,0)])
 				#(x, y), (x, ySym), (xSym , y), (xSym, ySym) are in the circle
 		
 
 func _ready():
+	randomize()
 	noise.seed = randi()
 	noise.octaves = 4
 	noise.period = 20.0
 	noise.persistence = 0.8
 	generate_map(false)
+	circle_brush(Vector2((CHUNK_SIZE*MAP_SIZE.x)/2 + SPAWN_OFFSET.x, SPAWN_OFFSET.y), 10, 0)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
-func _process(delta):
-	if Input.is_action_pressed("ui_up"):
-		SURFACE_LEVEL += 0.1*delta
-		generate_map(true)
-	elif Input.is_action_pressed("ui_down"):
-		SURFACE_LEVEL -= 0.1*delta
-		generate_map(true)
+#func _process(delta):
+#	if Input.is_action_pressed("ui_up"):
+#		SURFACE_LEVEL += 0.1*delta
+#		generate_map(true)
+#	elif Input.is_action_pressed("ui_down"):
+#		SURFACE_LEVEL -= 0.1*delta
+#		generate_map(true)
 	
-	if Input.is_action_just_pressed("ui_select"):
-		var tempball = Ball.instance()
-		tempball.position = get_global_mouse_position()
-		add_child(tempball)
-	
-	if Input.is_action_pressed("ui_accept"):
-		var pos = get_global_mouse_position()
-		pos.x = round(pos.x/TILE_SIZE)
-		pos.y = round(pos.y/TILE_SIZE)
-		if pos.x < CHUNK_SIZE*MAP_SIZE.x and pos.x > 0:
-			if pos.y < CHUNK_SIZE*MAP_SIZE.y and pos.y > 0:
-				circle_brush(pos, 1, 0.8*delta)
+#	if Input.is_action_just_pressed("ui_select"):
+#		var tempball = Ball.instance()
+#		tempball.position = get_global_mouse_position()
+#		add_child(tempball)
+#
+#	if Input.is_action_pressed("ui_accept"):
+#		var pos = get_global_mouse_position()
+#		pos.x = round(pos.x/TILE_SIZE)
+#		pos.y = round(pos.y/TILE_SIZE)
+#		if pos.x < CHUNK_SIZE*MAP_SIZE.x and pos.x > 0:
+#			if pos.y < CHUNK_SIZE*MAP_SIZE.y and pos.y > 0:
+#				circle_brush(pos, 1, 0.8*delta)

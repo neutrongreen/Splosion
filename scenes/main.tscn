@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://entitys/voxels/VoxelMap.tscn" type="PackedScene" id=1]
+[ext_resource path="res://entitys/player/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assests/cave/cave_0000_front.png" type="Texture" id=3]
+[ext_resource path="res://assests/cave/cave_0001_mid.png" type="Texture" id=4]
+[ext_resource path="res://assests/cave/cave_0002_back.png" type="Texture" id=5]
+
+[node name="main" type="Node2D"]
+
+[node name="VoxelMap" parent="." instance=ExtResource( 1 )]
+CHUNK_SIZE = 16
+TILE_SIZE = 16
+SPAWN_OFFSET = Vector2( 0, 3 )
+SURFACE_LEVEL = 0.95
+
+[node name="KinematicBody2D" parent="." instance=ExtResource( 2 )]
+position = Vector2( 513, 301 )
+voxelmapnode = NodePath("../VoxelMap")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="front" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.7, 0.7 )
+motion_mirroring = Vector2( 2000, 2000 )
+
+[node name="cave_0000_front" type="Sprite" parent="ParallaxBackground/front"]
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 3 )
+centered = false
+
+[node name="mid" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.8, 0.8 )
+motion_mirroring = Vector2( 2000, 2000 )
+
+[node name="cave_0001_mid" type="Sprite" parent="ParallaxBackground/mid"]
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 4 )
+centered = false
+
+[node name="back" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.9, 0.9 )
+motion_mirroring = Vector2( 2000, 2000 )
+
+[node name="cave_0002_back" type="Sprite" parent="ParallaxBackground/back"]
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 5 )
+centered = false

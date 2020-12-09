@@ -4,7 +4,7 @@ export var chunk_pos= Vector2(0 ,0)
 var map = NAN
 var polygons = []
 var bitwise = [1, 2, 4, 8]
-var colours = PoolColorArray([Color(255,255,255)])
+var colours = PoolColorArray([Color("6d533b")])
 var test_colours = NAN
 
 # Declare member variables here. Examples:
@@ -133,10 +133,10 @@ func _draw():
 			if(polygons[x][y]):
 				var geo_invalid = Geometry.triangulate_polygon(polygons[x][y]).empty()
 				if(!geo_invalid):
-					if map.testing:
-						draw_polygon(polygons[x][y], test_colours)
-					else:
-						draw_polygon(polygons[x][y], colours)
+#					if map.testing:
+#						draw_polygon(polygons[x][y], test_colours)
+#					else:
+					draw_polygon(polygons[x][y], colours)
 					
 					var collision = ConvexPolygonShape2D.new()
 					collision.set_point_cloud(polygons[x][y])
