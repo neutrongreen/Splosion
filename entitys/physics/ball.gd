@@ -7,8 +7,19 @@ extends RigidBody2D
 export (int) var radius = 10
 var voxelmap = 0
 var final = false
+var power = 1
+var max_radius = 10
+var min_radius = 4
+var min_time = 0.5
+var max_time = 5
+
+var particle_min_lifespan = 0.1
+var particle_max_lifespan = 0.3
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$Timer.wait_time = lerp(min_time, max_time, power)
+	$Timer.start()
+	$Particles2D.lifetime = lerp(particle_min_lifespan, particle_max_lifespan, power)
 	pass # Replace with function body.
 
 
@@ -22,7 +33,8 @@ func _on_Timer_timeout():
 	$Sprite.visible = false
 	final = true
 	mode = RigidBody2D.MODE_STATIC
-	voxelmap.circle_brush(Vector2(position.x/voxelmap.TILE_SIZE, position.y/voxelmap.TILE_SIZE), 10, 0)
+	var radius = int(lerp(min_radius, max_radius, power))
+	voxelmap.circle_brush(Vector2(position.x/voxelmap.TILE_SIZE, position.y/voxelmap.TILE_SIZE), radius, 0)
 func _physics_process(delta):
 	position.x = clamp(position.x, 0, voxelmap.TILE_SIZE*voxelmap.CHUNK_SIZE*voxelmap.MAP_SIZE.x)
 	position.y = clamp(position.y, 0, voxelmap.TILE_SIZE*voxelmap.CHUNK_SIZE*voxelmap.MAP_SIZE.y)

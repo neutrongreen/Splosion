@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "//thanks https://godotengine.org/qa/62637/is-there-a-way-to-blur-a-sprite 13/12/2020
+shader_type canvas_item;
+
+uniform int blurSize : hint_range(0,20);
+
+void fragment()
+{
+COLOR = textureLod(SCREEN_TEXTURE, SCREEN_UV, float(blurSize)/10.0);
+}"
+
+[resource]
+render_priority = 1
+shader = SubResource( 1 )
+shader_param/blurSize = 20

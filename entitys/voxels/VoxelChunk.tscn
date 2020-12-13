@@ -3,4 +3,5 @@
 [ext_resource path="res://entitys/voxels/VoxelChunk.gd" type="Script" id=1]
 
 [node name="Chunk" type="StaticBody2D"]
+z_as_relative = false
 script = ExtResource( 1 )

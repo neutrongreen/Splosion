@@ -10,6 +10,7 @@ var noise = OpenSimplexNoise.new()
 
 onready var VoxelChunk = load("res://entitys/voxels/VoxelChunk.tscn")
 onready var Ball = load("res://entitys/physics/ball.tscn")
+export (int) var endbar_size = 10
 export (int) var CHUNK_SIZE = 32
 export (Resource) var SHAPE_LIST
 export (Array, Resource) var VOXEL_TABLE
@@ -111,13 +112,20 @@ func circle_brush(mappos, r, strength):
 
 func _ready():
 	randomize()
-	noise.seed = randi()
+	noise.seed = Globals.level
+
 	noise.octaves = 4
 	noise.period = 20.0
 	noise.persistence = 0.8
 	generate_map(false)
 	circle_brush(Vector2((CHUNK_SIZE*MAP_SIZE.x)/2 + SPAWN_OFFSET.x, SPAWN_OFFSET.y), 10, 0)
 
+func _draw():
+	var mesh = PoolVector2Array([Vector2(0, TILE_SIZE*CHUNK_SIZE*MAP_SIZE.y-endbar_size), 
+		Vector2( TILE_SIZE*CHUNK_SIZE*MAP_SIZE.x, TILE_SIZE*CHUNK_SIZE*MAP_SIZE.y-endbar_size),
+		Vector2( TILE_SIZE*CHUNK_SIZE*MAP_SIZE.x, TILE_SIZE*CHUNK_SIZE*MAP_SIZE.y), 
+		Vector2(0, TILE_SIZE*CHUNK_SIZE*MAP_SIZE.y)])
+	draw_polygon(mesh, PoolColorArray([Color("32CD32")]))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

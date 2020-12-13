@@ -1,0 +1,111 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://assests/Bomb_anim0001.png" type="Texture" id=1]
+[ext_resource path="res://scenes/hud.gd" type="Script" id=2]
+[ext_resource path="res://scenes/blur.tres" type="Material" id=3]
+[ext_resource path="res://scenes/hudbackground.tres" type="StyleBox" id=4]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.305882, 1, 0.184314, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.363281, 0.363281, 0.363281, 1 )
+
+[node name="hud" type="Control"]
+material = ExtResource( 3 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+self_modulate = Color( 0.686275, 0.686275, 0.686275, 1 )
+use_parent_material = true
+anchor_right = 1.0
+anchor_bottom = 0.0763889
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1017.0
+margin_bottom = 37.0
+custom_constants/separation = 180
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="timelabel" type="Label" parent="PanelContainer/HBoxContainer"]
+margin_left = 45.0
+margin_top = 8.0
+margin_right = 72.0
+margin_bottom = 22.0
+text = "T:01"
+
+[node name="level" type="Label" parent="PanelContainer/HBoxContainer"]
+margin_left = 252.0
+margin_top = 8.0
+margin_right = 302.0
+margin_bottom = 22.0
+text = "Level: 0"
+align = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainer/HBoxContainer"]
+margin_left = 482.0
+margin_right = 629.0
+margin_bottom = 30.0
+
+[node name="label" type="Label" parent="PanelContainer/HBoxContainer/HBoxContainer3"]
+margin_top = 8.0
+margin_right = 43.0
+margin_bottom = 22.0
+text = "Depth:"
+align = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="PanelContainer/HBoxContainer/HBoxContainer3"]
+margin_left = 47.0
+margin_right = 147.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 100, 0 )
+size_flags_vertical = 1
+custom_styles/fg = SubResource( 1 )
+custom_styles/bg = ExtResource( 4 )
+max_value = 1.0
+percent_visible = false
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/HBoxContainer"]
+margin_left = 809.0
+margin_right = 965.0
+margin_bottom = 30.0
+
+[node name="TextureRect2" type="TextureRect" parent="PanelContainer/HBoxContainer/HBoxContainer2"]
+margin_right = 32.0
+margin_bottom = 30.0
+texture = ExtResource( 1 )
+stretch_mode = 5
+
+[node name="ProgressBar" type="ProgressBar" parent="PanelContainer/HBoxContainer/HBoxContainer2"]
+margin_left = 36.0
+margin_right = 136.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 100, 0 )
+size_flags_vertical = 1
+custom_styles/fg = SubResource( 2 )
+custom_styles/bg = ExtResource( 4 )
+max_value = 1.0
+percent_visible = false
+
+[node name="bombs" type="Label" parent="PanelContainer/HBoxContainer/HBoxContainer2"]
+margin_left = 140.0
+margin_top = 8.0
+margin_right = 156.0
+margin_bottom = 22.0
+text = ": 0"
+align = 2
