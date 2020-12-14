@@ -118,8 +118,10 @@ func _ready():
 	noise.period = 20.0
 	noise.persistence = 0.8
 	generate_map(false)
+	#extra code for player postioning
 	circle_brush(Vector2((CHUNK_SIZE*MAP_SIZE.x)/2 + SPAWN_OFFSET.x, SPAWN_OFFSET.y), 10, 0)
 
+#optional code
 func _draw():
 	var mesh = PoolVector2Array([Vector2(0, TILE_SIZE*CHUNK_SIZE*MAP_SIZE.y-endbar_size), 
 		Vector2( TILE_SIZE*CHUNK_SIZE*MAP_SIZE.x, TILE_SIZE*CHUNK_SIZE*MAP_SIZE.y-endbar_size),

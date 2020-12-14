@@ -6,6 +6,7 @@ extends RigidBody2D
 # var b = "text"
 export (int) var radius = 10
 export (Array, AudioStreamOGGVorbis) var collsion_sounds
+export (AudioStreamOGGVorbis) var explosion
 var voxelmap = 0
 var final = false
 var power = 1
@@ -38,12 +39,16 @@ func _on_Timer_timeout():
 	mode = RigidBody2D.MODE_STATIC
 	var radius = int(lerp(min_radius, max_radius, power))
 	voxelmap.circle_brush(Vector2(position.x/voxelmap.TILE_SIZE, position.y/voxelmap.TILE_SIZE), radius, 0)
+	$AudioStreamPlayer2D.stop()
+	$AudioStreamPlayer2D.stream = explosion
+	$AudioStreamPlayer2D.play()
+	
 func _physics_process(delta):
 	if position.x < 0 or position.x > voxelmap.TILE_SIZE*voxelmap.CHUNK_SIZE*voxelmap.MAP_SIZE.x:
 		queue_free()
 	if position.y < 0 or position.y > voxelmap.TILE_SIZE*voxelmap.CHUNK_SIZE*voxelmap.MAP_SIZE.y:
 		queue_free()
-	if final and $Particles2D.emitting == false:
+	if final and $Particles2D.emitting == false and $AudioStreamPlayer2D.playing == false:
 		queue_free()
 
 

@@ -22,6 +22,7 @@ onready var hud = get_node(hudnode)
 onready var Ball = load("res://entitys/physics/ball.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Globals.score = 0
 	lasttime = OS.get_ticks_msec()
 	$Camera2D.limit_left = 0
 	$Camera2D.limit_right = voxelmap.TILE_SIZE*voxelmap.CHUNK_SIZE*voxelmap.MAP_SIZE.x
