@@ -3,9 +3,9 @@ extends KinematicBody2D
 #https://godotengine.org/qa/62447/how-to-tell-how-long-a-button-is-pressed
 var bomb_count = 0
 var time = 0
-var starttime= 0 
 var duration = 0
 var power = 0
+var lasttime = 0
 export (float) var max_dur = 1
 # Declare member variables here. Examples:
 # var a = 2
@@ -22,7 +22,7 @@ onready var hud = get_node(hudnode)
 onready var Ball = load("res://entitys/physics/ball.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	starttime = OS.get_ticks_msec()
+	lasttime = OS.get_ticks_msec()
 	$Camera2D.limit_left = 0
 	$Camera2D.limit_right = voxelmap.TILE_SIZE*voxelmap.CHUNK_SIZE*voxelmap.MAP_SIZE.x
 	$Camera2D.limit_top = 0
@@ -36,8 +36,7 @@ func _ready():
 #func _process(delta):
 #	pass
 func _physics_process(delta):
-
-	time = (OS.get_ticks_msec() - starttime)/1000
+	time += delta
 	#move item
 	velocity.y += gravity*delta
 	velocity.x = 0

@@ -36,8 +36,10 @@ func _on_Timer_timeout():
 	var radius = int(lerp(min_radius, max_radius, power))
 	voxelmap.circle_brush(Vector2(position.x/voxelmap.TILE_SIZE, position.y/voxelmap.TILE_SIZE), radius, 0)
 func _physics_process(delta):
-	position.x = clamp(position.x, 0, voxelmap.TILE_SIZE*voxelmap.CHUNK_SIZE*voxelmap.MAP_SIZE.x)
-	position.y = clamp(position.y, 0, voxelmap.TILE_SIZE*voxelmap.CHUNK_SIZE*voxelmap.MAP_SIZE.y)
+	if position.x < 0 or position.x > voxelmap.TILE_SIZE*voxelmap.CHUNK_SIZE*voxelmap.MAP_SIZE.x:
+		queue_free()
+	if position.y < 0 or position.y > voxelmap.TILE_SIZE*voxelmap.CHUNK_SIZE*voxelmap.MAP_SIZE.y:
+		queue_free()
 	if final and $Particles2D.emitting == false:
 		queue_free()
 
