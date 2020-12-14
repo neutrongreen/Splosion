@@ -5,6 +5,7 @@ extends RigidBody2D
 # var a = 2
 # var b = "text"
 export (int) var radius = 10
+export (Array, AudioStreamOGGVorbis) var collsion_sounds
 var voxelmap = 0
 var final = false
 var power = 1
@@ -15,12 +16,14 @@ var max_time = 5
 
 var particle_min_lifespan = 0.1
 var particle_max_lifespan = 0.3
+
+var lastbody = ""
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	randomize()
 	$Timer.wait_time = lerp(min_time, max_time, power)
 	$Timer.start()
 	$Particles2D.lifetime = lerp(particle_min_lifespan, particle_max_lifespan, power)
-	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -43,5 +46,9 @@ func _physics_process(delta):
 	if final and $Particles2D.emitting == false:
 		queue_free()
 
+
+
 func _on_ball_body_entered(body):
-	pass # Replace with function body.
+	$AudioStreamPlayer2D.stream = collsion_sounds[randi() % collsion_sounds.size()]
+	$AudioStreamPlayer2D.play()
+

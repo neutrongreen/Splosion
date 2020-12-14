@@ -9,7 +9,7 @@ extends Control
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$VBoxContainer/Label.text = "Level: %s" % Globals.level
-	$VBoxContainer/Label2.text = "Score: %s" % Globals.score
+	$VBoxContainer/Label2.text = "Score: %s" % int(Globals.score)
 	pass # Replace with function body.
 
 
