@@ -33,9 +33,9 @@ func _ready():
 
 
 func _on_Timer_timeout():
-	$Particles2D.emitting = true
-	$Sprite.visible = false
 	final = true
+	$Particles2D.emitting = true
+	$AnimatedSprite.visible = false
 	mode = RigidBody2D.MODE_STATIC
 	var radius = int(lerp(min_radius, max_radius, power))
 	voxelmap.circle_brush(Vector2(position.x/voxelmap.TILE_SIZE, position.y/voxelmap.TILE_SIZE), radius, 0)
@@ -44,6 +44,8 @@ func _on_Timer_timeout():
 	$AudioStreamPlayer2D.play()
 	
 func _physics_process(delta):
+	if !final:
+		$AnimatedSprite.speed_scale = clamp(2/($Timer.time_left/$Timer.wait_time), 0, 10)
 	if position.x < 0 or position.x > voxelmap.TILE_SIZE*voxelmap.CHUNK_SIZE*voxelmap.MAP_SIZE.x:
 		queue_free()
 	if position.y < 0 or position.y > voxelmap.TILE_SIZE*voxelmap.CHUNK_SIZE*voxelmap.MAP_SIZE.y:

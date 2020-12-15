@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assests/fonts/testfont.tres" type="DynamicFont" id=1]
 [ext_resource path="res://assests/fonts/testfont2.tres" type="DynamicFont" id=2]
 [ext_resource path="res://scenes/ParallaxBackground2.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/blur.tres" type="Material" id=4]
+[ext_resource path="res://assests/fonts/testfont3.tres" type="DynamicFont" id=5]
 [ext_resource path="res://scenes/TitleScreen.gd" type="Script" id=7]
 
 [sub_resource type="StyleBoxEmpty" id=1]
@@ -30,7 +31,7 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="CanvasLayer/VBoxContainer"]
-margin_right = 924.0
+margin_right = 1020.0
 margin_bottom = 58.0
 custom_styles/normal = SubResource( 1 )
 custom_fonts/font = ExtResource( 1 )
@@ -40,10 +41,11 @@ uppercase = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
 margin_top = 62.0
-margin_right = 924.0
+margin_right = 1020.0
 margin_bottom = 476.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+custom_constants/separation = 106
 
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
 self_modulate = Color( 0.686275, 0.686275, 0.686275, 1 )
@@ -88,6 +90,30 @@ rect_min_size = Vector2( 0, 40 )
 custom_fonts/font = ExtResource( 2 )
 text = "Exit"
 flat = true
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
+margin_left = 320.0
+margin_top = 48.0
+margin_right = 963.0
+margin_bottom = 365.0
+custom_fonts/font = ExtResource( 5 )
+text = "This game is a demonstration of fully destructable terrain 
+in the godot game engine using a custom buit voxel engine
+
+the goal of the game is to get to the bottom of each level as fast as possible using the least
+amout of bombs.
+the ingame score is calulated by multipling the number of bombs used by the time taken
+the lower a score for a level the better you prefom
+each level will have diffrent terrain, but will remain consistent between runs
+
+Assets used in game:
+https://opengameart.org/content/classic-hero By GrafxKid
+https://opengameart.org/content/seamless-cave-in-parts	 By PWL
+https://opengameart.org/content/bomb-sprite By Znevs
+https://opengameart.org/content/bombs By Chrisblue
+https://kenney.nl/assets/impact-sounds By Kenny	
+Collected on 15/12/2020"
+valign = 1
 
 [node name="ParallaxBackground2" parent="." instance=ExtResource( 3 )]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/Button" to="." method="_on_Button_pressed"]

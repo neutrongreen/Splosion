@@ -7,6 +7,7 @@ var duration = 0
 var power = 0
 var lasttime = 0
 export (float) var max_dur = 1
+var state
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -37,17 +38,28 @@ func _ready():
 #func _process(delta):
 #	pass
 func _physics_process(delta):
+	state = "idle"
 	time += delta
 	#move item
-	velocity.y += gravity*delta
 	velocity.x = 0
 	if(Input.is_action_pressed("ui_left")):
+		state = "walk"
 		velocity.x -= walk_speed*delta
 	if(Input.is_action_pressed("ui_right")):
+		state = "walk"
 		velocity.x += walk_speed*delta
 	if(Input.is_action_just_pressed("ui_space") and is_on_floor() == true):
 		velocity.y -= jump_boost
+	if velocity.x < 0:
+		$AnimatedSprite.flip_h = true
+	elif velocity.x > 0:
+		$AnimatedSprite.flip_h = false
+	if $RayCast2D.is_colliding() == false:
+		state = "jump"
+	velocity.y += gravity*delta
 	velocity = move_and_slide(velocity, Vector2(0, -1))
+
+	$AnimatedSprite.play(state)
 	if position.y >  voxelmap.TILE_SIZE*voxelmap.CHUNK_SIZE*voxelmap.MAP_SIZE.y:
 		#reload scene
 		Globals.score = time*bomb_count
