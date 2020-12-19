@@ -9,20 +9,23 @@ var bitwise = [1, 2, 4, 8]
 var noise = OpenSimplexNoise.new()
 
 onready var VoxelChunk = load("res://entitys/voxels/VoxelChunk.tscn")
-onready var Ball = load("res://entitys/physics/ball.tscn")
+
+#game spesific constant can be removed
 export (int) var endbar_size = 10
+#voxel engine spefic constants cannot be removed
 export (int) var CHUNK_SIZE = 32
 export (Resource) var SHAPE_LIST
 export (Array, Resource) var VOXEL_TABLE
 export (int) var TILE_SIZE = 32
 export (Vector2) var MAP_SIZE = Vector2(4, 4)
-export (Vector2) var SPAWN_OFFSET = Vector2(4, 4)
 export (float) var MAP_SCALE = 1
 export (float) var SURFACE_LEVEL = 0.4
 export (bool) var testing = false
-# Called when the node enters the scene tree for the first time.
+#inm varbles
 var map = []
 onready var chunks = []
+
+#constants
 var edges = [
 	[Vector2(0, 0), Vector2(1, 0)],
 	[Vector2(1, 0), Vector2(1, 1)],
@@ -40,15 +43,22 @@ static func delete_children(node):
 	for n in node.get_children():
 		node.remove_child(n)
 		n.queue_free()
+		
+#when queryed for a postion on the maps scalaur value this function is called
+#can be overwritn
+func map_gen_query(x, y):
+	return noise.get_noise_2d(x * MAP_SCALE, y * MAP_SCALE) + 1
 
-
+#genrates the voxel map, if persist in not true, map will be regenerated and rerended
+#and if chunks are not generated chunks will be genrated for optimstation
+#then all chunks iwll be updated after generation
 func generate_map(persist):
 	if ! persist:
 		map = []
 		for x in range((MAP_SIZE.x * CHUNK_SIZE) + 1):
 			map.append([])
 			for y in range((MAP_SIZE.y * CHUNK_SIZE) + 1):
-				map[x].append(noise.get_noise_2d(x * MAP_SCALE, y * MAP_SCALE) + 1)
+				map[x].append(map_gen_query(x, y))
 	if ! chunks:
 		for x in range(MAP_SIZE.x):
 			chunks.append([])
@@ -62,7 +72,7 @@ func generate_map(persist):
 			for y in range(MAP_SIZE.y):
 				chunks[x][y].update_voxels()
 
-
+#returns an array of chunk refrences refring the chunks that are updated when a point is updated on the scalr field
 func get_updated_chunks(coords):
 	var x_array = []
 	var y_array = []
@@ -84,6 +94,7 @@ func get_updated_chunks(coords):
 
 
 #https://stackoverflow.com/questions/15856411/finding-all-the-points-within-a-circle-in-2d-space
+#used as a basic interaction tool to interact witht the scaler feild
 func circle_brush(mappos, r, strength):
 	var updated_chunks = []
 	for x in range(mappos.x - r, mappos.x + r):
@@ -114,7 +125,7 @@ func circle_brush(mappos, r, strength):
 #		chunks[i.x][i.y].colours = PoolColorArray([Color(255,255,0)])
 #(x, y), (x, ySym), (xSym , y), (xSym, ySym) are in the circle
 
-
+#onready is game spefic easly removed
 func _ready():
 	randomize()
 	noise.seed = Globals.level
@@ -123,11 +134,11 @@ func _ready():
 	noise.period = 20.0
 	noise.persistence = 0.8
 	generate_map(false)
+	print("map gen done")
 	#extra code for player postioning
-	circle_brush(Vector2((CHUNK_SIZE * MAP_SIZE.x) / 2 + SPAWN_OFFSET.x, SPAWN_OFFSET.y), 10, 0)
 
 
-#optional code
+#optional draw code to genrade end of level bar
 func _draw():
 	var mesh = PoolVector2Array(
 		[
@@ -141,6 +152,9 @@ func _draw():
 		]
 	)
 	draw_polygon(mesh, PoolColorArray([Color("32CD32")]))
+
+
+#old testing code
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

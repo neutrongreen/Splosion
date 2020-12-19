@@ -36,6 +36,7 @@ func interpolateVertsX(v1, v2, vect1, vect2):
 # var b = "text"
 # Called when the node enters the scene tree for the first time.
 #flip axis commands
+#filp commands pretty much binary
 func flip_x_axis(vector):
 	if vector.x == 1:
 		vector.x = 0
@@ -43,7 +44,7 @@ func flip_x_axis(vector):
 		vector.x = 1
 	return vector
 
-
+#fip commands
 func flip_y_axis(vector):
 	if vector.y == 1:
 		vector.y = 0
@@ -95,6 +96,7 @@ func get_shape(VOXEL_DATA, mappos):
 	return shape
 
 
+#get voxel id for postion and lookup shape in table
 func generate_voxel(pos):
 	var voxid = 0
 	var mappos = pos
@@ -112,6 +114,7 @@ func generate_voxel(pos):
 			return get_shape(i, Vector2(mappos.x, mappos.y))
 
 
+#regenrate all polygons for chunk based upon updated values
 func update_voxels():
 	polygons = []
 	for x in range(map.CHUNK_SIZE):
@@ -142,7 +145,7 @@ func _ready():
 #called when master render function is called and redraws on the screen the chunk
 #and redraws the collsion meshes 
 
-
+#draw polyogns and apeend to colsion mesh
 func _draw():
 	shape_owner_clear_shapes(0)
 	for x in range(map.CHUNK_SIZE):
