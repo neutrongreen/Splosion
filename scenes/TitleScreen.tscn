@@ -93,9 +93,9 @@ flat = true
 
 [node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
 margin_left = 320.0
-margin_top = 48.0
+margin_top = 8.0
 margin_right = 963.0
-margin_bottom = 365.0
+margin_bottom = 405.0
 custom_fonts/font = ExtResource( 5 )
 text = "This game is a demonstration of fully destructable terrain 
 in the godot game engine using a custom buit voxel engine
@@ -105,6 +105,10 @@ amout of bombs.
 the ingame score is calulated by multipling the number of bombs used by the time taken
 the lower a score for a level the better you prefom
 each level will have diffrent terrain, but will remain consistent between runs
+
+use the arrow keys to move, and jump
+and the mouse to throw bombs using left click
+pause the game by pressing escape
 
 Assets used in game:
 https://opengameart.org/content/classic-hero By GrafxKid
